@@ -1,6 +1,6 @@
 > *** This is a private image. Use it at your own risk! ***
 
-# Docker Android Git (`FROM beevelop/android:v25.2.3`)
+# Docker Android Fastlane (`FROM beevelop/android:v25.2.3`)
 ----
 ### Pull from Docker Hub
 ```
