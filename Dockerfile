@@ -1,15 +1,32 @@
-FROM beevelop/android:v25.2.3
+FROM openjdk:8
 
-LABEL maintainer="contato@brunobastosg.io"
+ENV ANDROID_HOME /opt/android-sdk-linux
 
-RUN locale-gen en_US.UTF-8
-ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
+# Download Android SDK into $ANDROID_HOME
+# You can find URL to the current version at: https://developer.android.com/studio/index.html
 
-RUN apt-get update && apt-get install --no-install-recommends -y build-essential git ruby2.3-dev \
+ENV PATH ${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools
+
+RUN mkdir -p ${ANDROID_HOME} && \
+    cd ${ANDROID_HOME} && \
+    wget -q https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip -O android_tools.zip && \
+    unzip android_tools.zip && \
+    rm android_tools.zip &&  \
+    yes | sdkmanager --licenses && \
+    sdkmanager 'platform-tools' && \
+    sdkmanager 'platforms;android-28' && \
+    sdkmanager 'build-tools;28.0.3' && \
+    sdkmanager 'extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2' && \
+    sdkmanager 'extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2' && \
+    sdkmanager 'extras;google;m2repository' && \
+    sdkmanager 'extras;android;m2repository' && \
+    sdkmanager 'extras;google;google_play_services' && \
+    apt-get update &&  apt-get install --no-install-recommends -y build-essential ca-certificates  git ruby2.3-dev \
+    && update-ca-certificates \
     && gem install fastlane \
     && gem install bundler \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && apt-get autoremove -y && apt-get clean
 
-COPY android-sdk-license $ANDROID_HOME/licenses/
-COPY android-sdk-preview-license $ANDROID_HOME/licenses/
+
+
