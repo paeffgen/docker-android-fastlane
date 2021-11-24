@@ -20,8 +20,8 @@ RUN mkdir -p ${ANDROID_HOME} && \
     sdkmanager 'extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2' && \
     sdkmanager 'extras;google;m2repository' && \
     sdkmanager 'extras;android;m2repository' && \
-    sdkmanager 'extras;google;google_play_services' && \
-    apt-get update &&  apt-get install --no-install-recommends -y build-essential ca-certificates  git ruby2.3-dev \
+    sdkmanager 'extras;google;google_play_services'
+RUN apt-get update &&  apt-get install --no-install-recommends -y build-essential ca-certificates git ruby2.7-dev \
     && update-ca-certificates \
     && gem install fastlane \
     && gem install bundler \
@@ -29,6 +29,9 @@ RUN mkdir -p ${ANDROID_HOME} && \
     && gem install fastlane-plugin-versioning_android \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && apt-get autoremove -y && apt-get clean
+
+RUN useradd -ms /bin/bash build
+USER build
 
 WORKDIR /opt/build/android
 
