@@ -14,8 +14,8 @@ RUN mkdir -p ${ANDROID_HOME} && \
     rm android_tools.zip &&  \
     yes | sdkmanager --licenses && \
     sdkmanager 'platform-tools' && \
-    sdkmanager 'platforms;android-28' && \
-    sdkmanager 'build-tools;28.0.3' && \
+    sdkmanager 'platforms;android-30' && \
+    sdkmanager 'build-tools;30.0.2' && \
     sdkmanager 'extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2' && \
     sdkmanager 'extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2' && \
     sdkmanager 'extras;google;m2repository' && \
@@ -25,8 +25,11 @@ RUN mkdir -p ${ANDROID_HOME} && \
     && update-ca-certificates \
     && gem install fastlane \
     && gem install bundler \
+    && gem install fastlane-plugin-increment_version_code \
+    && gem install fastlane-plugin-versioning_android \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && apt-get autoremove -y && apt-get clean
 
+WORKDIR /opt/build/android
 
-
+ENTRYPOINT [ "/usr/local/bin/fastlane" ]
